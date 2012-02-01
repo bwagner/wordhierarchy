@@ -1,6 +1,5 @@
 package net.xmlizer.wordhierarchy;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -62,22 +61,22 @@ public class WordHierarchyTest {
 	 * 	nen
 	 * 
 	 */
-	final String[] ihr = new String[] { "Ihnen", "Ihr", "Ihre", "Ihrem",
-			"Ihren", "Ihrer", "Ihrerseits", "Ihres", "Ihresgleichen",
+	private static final String[] ihr = new String[] { "Ihnen", "Ihr", "Ihre",
+			"Ihrem", "Ihren", "Ihrer", "Ihrerseits", "Ihres", "Ihresgleichen",
 			"Ihrethalben", "Ihretwegen", "Ihretwillen", "Ihrige", "Ihrigem",
 			"Ihrigen", "Ihriger", "Ihriges", "Ihrs", "Sie", };
 
-	final String[] du = new String[] { "Dein", "Deine", "Deinem", "Deinen",
-			"Deiner", "Deinerseits", "Deines", "Deinesgleichen",
-			"Deinethalben", "Deinetwegen", "Deinetwillen", "Deinige",
-			"Deinigem", "Deinigen", "Deiniger", "Deiniges", "Deins", "Dich",
-			"Dir", "Du", "Euch", "Euer", "Euere", "Euerem", "Euerer", "Eueres",
-			"Euers", "Euerseits", "Eure", "Eurem", "Euren", "Eurerseits",
-			"Eures", "Euresgleichen", "Eurethalben", "Euretwegen",
-			"Euretwillen", "Eurige", "Eurigem", "Eurigen", "Euriger",
-			"Euriges", };
+	private static final String[] du = new String[] { "Dein", "Deine",
+			"Deinem", "Deinen", "Deiner", "Deinerseits", "Deines",
+			"Deinesgleichen", "Deinethalben", "Deinetwegen", "Deinetwillen",
+			"Deinige", "Deinigem", "Deinigen", "Deiniger", "Deiniges", "Deins",
+			"Dich", "Dir", "Du", "Euch", "Euer", "Euere", "Euerem", "Euerer",
+			"Eueres", "Euers", "Euerseits", "Eure", "Eurem", "Euren",
+			"Eurerseits", "Eures", "Euresgleichen", "Eurethalben",
+			"Euretwegen", "Euretwillen", "Eurige", "Eurigem", "Eurigen",
+			"Euriger", "Euriges", };
 
-	final String[] shortIhr = new String[] { "Ihr", "Sie" };
+	private static final String[] shortIhr = new String[] { "Ihr", "Sie" };
 
 	@Test
 	public void testPattern() {
@@ -100,7 +99,7 @@ public class WordHierarchyTest {
 		for (final String str : vforms) {
 			ihrSet.add(str);
 		}
-		WordHierarchyBuilder.Word ihrTree = WordHierarchyBuilder
+		final WordHierarchyBuilder.Word ihrTree = WordHierarchyBuilder
 				.createWordTree(ihrSet, null);
 		// System.out.println("result:" + ihrTree.myToString(true));
 		final String regexStr = ihrTree.toRegex();
@@ -121,7 +120,7 @@ public class WordHierarchyTest {
 		for (final String str : vforms) {
 			ihrSet.add(str);
 		}
-		Word ihrTree = WordHierarchyBuilder.createWordTree(ihrSet, null);
+		final Word ihrTree = WordHierarchyBuilder.createWordTree(ihrSet, null);
 		// System.out.println("result:" + ihrTree.myToString(true));
 		final String regexStr = ihrTree.toRegex();
 		final Pattern pattern = Pattern.compile(regexStr);
@@ -131,23 +130,6 @@ public class WordHierarchyTest {
 		}
 		assertFalse(pattern.matcher("").find());
 		assertFalse(pattern.matcher("fix").find());
-	}
-
-	@Test
-	public void testPermute() {
-		final String[] elements = new String[] { "a", "b", "c", };
-		final String[][] expected = new String[][] { { "a", "b", "c" },
-				{ "a", "c", "b" }, { "b", "a", "c" }, { "b", "c", "a" },
-				{ "c", "a", "b" }, { "c", "b", "a" },
-
-		};
-		final PermutationHelper<String> x = new PermutationHelper<String>(
-				elements);
-		int i = 0;
-		for (final String[] result : x) {
-			assertArrayEquals(expected[i], result);
-			++i;
-		}
 	}
 
 	// This test runs for a while
@@ -180,10 +162,10 @@ public class WordHierarchyTest {
 
 		final PermutationHelper<String> x = new PermutationHelper<String>(ihr2);
 
-		BufferedWriter out = new BufferedWriter(new FileWriter("foo"));
+		final BufferedWriter out = new BufferedWriter(new FileWriter("foo"));
 
 		for (final String[] result : x) {
-			WordHierarchyBuilder.Word ihrTree = WordHierarchyBuilder
+			final WordHierarchyBuilder.Word ihrTree = WordHierarchyBuilder
 					.createWordTree(result, out);
 
 			out.write("result:" + ihrTree.myToString(false));
