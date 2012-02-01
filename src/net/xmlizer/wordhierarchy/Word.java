@@ -160,6 +160,14 @@ public class Word implements Comparable<Word> {
 		}
 	}
 
+	/**
+	 * Returns collection as a sorted list.
+	 * see {@linkplain http://stackoverflow.com/a/740351/642750}
+	 * 
+	 * @param <T>
+	 * @param c
+	 * @return set as a sorted list.
+	 */
 	public static <T extends Comparable<? super T>> List<T> asSortedList(
 			Collection<T> c) {
 		final List<T> list = new ArrayList<T>(c);
@@ -171,6 +179,20 @@ public class Word implements Comparable<Word> {
 		final StringifyWordProcessor wp = new StringifyWordProcessor(withId);
 		processAll(wp);
 		return wp.getResult();
+	}
+
+	public String myToStringSorted(boolean withId) {
+		final StringifyWordProcessor wp = new StringifyWordProcessor(withId);
+		processAllSorted(wp);
+		return wp.getResult();
+	}
+
+	public String myToString() {
+		return myToString(false);
+	}
+
+	public String myToStringSorted() {
+		return myToStringSorted(false);
 	}
 
 	public boolean testIt(final Collection<String> vocabulary, final Word result) {
