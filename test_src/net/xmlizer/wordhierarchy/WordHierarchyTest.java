@@ -76,7 +76,17 @@ public class WordHierarchyTest {
 			"Euretwegen", "Euretwillen", "Eurige", "Eurigem", "Eurigen",
 			"Euriger", "Euriges", };
 
-	private static final String[] shortIhr = new String[] { "Ihr", "Sie" };
+	private static final String[] shortIhr = "Ihr Sie".split("\\s");
+	private static final String[] shortEuch = "Euch Euer Eure Eurer"
+			.split("\\s");
+
+	// @Test // TODO
+	public void testEuer() {
+		final WordHierarchyBuilder.Word euchTree = WordHierarchyBuilder
+				.createWordTree(shortEuch);
+		assertEquals("(?:Eu(?:er|ch|re(?:r)?))", euchTree.toRegex());
+
+	}
 
 	@Test
 	public void testPattern() {
@@ -100,7 +110,7 @@ public class WordHierarchyTest {
 			ihrSet.add(str);
 		}
 		final WordHierarchyBuilder.Word ihrTree = WordHierarchyBuilder
-				.createWordTree(ihrSet, null);
+				.createWordTree(ihrSet);
 		// System.out.println("result:" + ihrTree.myToString(true));
 		final String regexStr = ihrTree.toRegex();
 		final Pattern pattern = Pattern.compile(regexStr);
@@ -120,7 +130,7 @@ public class WordHierarchyTest {
 		for (final String str : vforms) {
 			ihrSet.add(str);
 		}
-		final Word ihrTree = WordHierarchyBuilder.createWordTree(ihrSet, null);
+		final Word ihrTree = WordHierarchyBuilder.createWordTree(ihrSet);
 		// System.out.println("result:" + ihrTree.myToString(true));
 		final String regexStr = ihrTree.toRegex();
 		final Pattern pattern = Pattern.compile(regexStr);
