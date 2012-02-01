@@ -4,12 +4,11 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Copyright (C) 2010 Swiss Library for the Blind, Visually Impaired and Print
- * Disabled
+ * Copyright (C) 2010 Bernhard Wagner
  * 
- * This file is part of dtbook-preptools.
+ * This file is part of wordhierarchy.
  * 
- * dtbook-preptools is free software: you can redistribute it
+ * wordhierarchy is free software: you can redistribute it
  * and/or modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation, either
  * version 3 of the License, or (at your option) any later version.
