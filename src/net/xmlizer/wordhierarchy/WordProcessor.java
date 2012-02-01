@@ -25,11 +25,11 @@ import java.util.HashSet;
  */
 
 interface WordProcessor {
-	boolean processWord(final WordHierarchyBuilder.Word word);
+	boolean processWord(final Word word);
 
-	void preChildren(final WordHierarchyBuilder.Word word);
+	void preChildren(final Word word);
 
-	void postChildren(final WordHierarchyBuilder.Word word);
+	void postChildren(final Word word);
 }
 
 class TestWordProcessor implements WordProcessor {
@@ -42,10 +42,10 @@ class TestWordProcessor implements WordProcessor {
 	}
 
 	@Override
-	public boolean processWord(final WordHierarchyBuilder.Word word) {
+	public boolean processWord(final Word word) {
 		String realword = word.getWord();
 		if (word.getWord() != null && word.isComplete()) {
-			WordHierarchyBuilder.Word parent = word;
+			Word parent = word;
 			while ((parent = parent.getParent()) != null) {
 				if (parent.getWord() != null) {
 					realword = parent.getWord() + realword;
@@ -63,12 +63,12 @@ class TestWordProcessor implements WordProcessor {
 	}
 
 	@Override
-	public void preChildren(final WordHierarchyBuilder.Word word) {
+	public void preChildren(final Word word) {
 		// nothing to do
 	}
 
 	@Override
-	public void postChildren(final WordHierarchyBuilder.Word word) {
+	public void postChildren(final Word word) {
 		// nothing to do
 	}
 
@@ -110,7 +110,7 @@ class StringifyWordProcessor implements WordProcessor {
 	}
 
 	@Override
-	public boolean processWord(final WordHierarchyBuilder.Word word) {
+	public boolean processWord(final Word word) {
 		final boolean DEBUG = false;
 		if (word.getWord() == null)
 			return false;
@@ -134,12 +134,12 @@ class StringifyWordProcessor implements WordProcessor {
 	}
 
 	@Override
-	public void preChildren(final WordHierarchyBuilder.Word word) {
+	public void preChildren(final Word word) {
 		indent++;
 	}
 
 	@Override
-	public void postChildren(final WordHierarchyBuilder.Word word) {
+	public void postChildren(final Word word) {
 		indent--;
 	}
 
@@ -157,7 +157,7 @@ class RegexWordProcessor implements WordProcessor {
 	final StringBuilder sb = new StringBuilder();
 
 	@Override
-	public boolean processWord(final WordHierarchyBuilder.Word word) {
+	public boolean processWord(final Word word) {
 		if (word.getWord() == null)
 			return false;
 		sb.append(word);
@@ -168,13 +168,13 @@ class RegexWordProcessor implements WordProcessor {
 	}
 
 	@Override
-	public void preChildren(final WordHierarchyBuilder.Word word) {
+	public void preChildren(final Word word) {
 		// sb.setLength(sb.length() - 1); // chop off "|"
 		sb.append("(?:");
 	}
 
 	@Override
-	public void postChildren(final WordHierarchyBuilder.Word word) {
+	public void postChildren(final Word word) {
 		sb.setLength(sb.length() - 1); // chop off "|"
 		sb.append(")");
 		sb.append(word.isComplete() ? "?" : "");

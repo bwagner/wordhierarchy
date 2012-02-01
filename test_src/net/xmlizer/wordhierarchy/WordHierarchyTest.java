@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.regex.Pattern;
 
 import net.xmlizer.permutation.PermutationHelper;
-import net.xmlizer.wordhierarchy.WordHierarchyBuilder.Word;
 
 import org.junit.Test;
 
@@ -82,7 +81,7 @@ public class WordHierarchyTest {
 
 	// @Test // TODO
 	public void testEuer() {
-		final WordHierarchyBuilder.Word euchTree = WordHierarchyBuilder
+		final Word euchTree = WordHierarchyBuilder
 				.createWordTree(shortEuch);
 		assertEquals("(?:Eu(?:er|ch|re(?:r)?))", euchTree.toRegex());
 
@@ -109,7 +108,7 @@ public class WordHierarchyTest {
 		for (final String str : vforms) {
 			ihrSet.add(str);
 		}
-		final WordHierarchyBuilder.Word ihrTree = WordHierarchyBuilder
+		final Word ihrTree = WordHierarchyBuilder
 				.createWordTree(ihrSet);
 		// System.out.println("result:" + ihrTree.myToString(true));
 		final String regexStr = ihrTree.toRegex();
@@ -175,7 +174,7 @@ public class WordHierarchyTest {
 		final BufferedWriter out = new BufferedWriter(new FileWriter("foo"));
 
 		for (final String[] result : x) {
-			final WordHierarchyBuilder.Word ihrTree = WordHierarchyBuilder
+			final Word ihrTree = WordHierarchyBuilder
 					.createWordTree(result, out);
 
 			out.write("result:" + ihrTree.myToString(false));
