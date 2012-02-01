@@ -79,11 +79,10 @@ public class WordHierarchyTest {
 	private static final String[] shortEuch = "Euch Euer Eure Eurer"
 			.split("\\s");
 
-	// @Test // TODO
+	@Test
 	public void testEuer() {
-		final Word euchTree = WordHierarchyBuilder
-				.createWordTree(shortEuch);
-		assertEquals("(?:Eu(?:er|ch|re(?:r)?))", euchTree.toRegex());
+		final Word euchTree = WordHierarchyBuilder.createWordTree(shortEuch);
+		assertEquals("(?:Eu(?:ch|er|re(?:r)?))", euchTree.toRegexSorted());
 
 	}
 
@@ -108,8 +107,7 @@ public class WordHierarchyTest {
 		for (final String str : vforms) {
 			ihrSet.add(str);
 		}
-		final Word ihrTree = WordHierarchyBuilder
-				.createWordTree(ihrSet);
+		final Word ihrTree = WordHierarchyBuilder.createWordTree(ihrSet);
 		// System.out.println("result:" + ihrTree.myToString(true));
 		final String regexStr = ihrTree.toRegex();
 		final Pattern pattern = Pattern.compile(regexStr);
@@ -174,8 +172,8 @@ public class WordHierarchyTest {
 		final BufferedWriter out = new BufferedWriter(new FileWriter("foo"));
 
 		for (final String[] result : x) {
-			final Word ihrTree = WordHierarchyBuilder
-					.createWordTree(result, out);
+			final Word ihrTree = WordHierarchyBuilder.createWordTree(result,
+					out);
 
 			out.write("result:" + ihrTree.myToString(false));
 			out.write("\n");

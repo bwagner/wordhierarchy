@@ -1,7 +1,10 @@
 package net.xmlizer.wordhierarchy;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,7 +27,7 @@ import java.util.Set;
  * <http://www.gnu.org/licenses/>.
  */
 
-public class Word {
+public class Word implements Comparable<Word> {
 	private static int instanceCount;
 	private final int id;
 	private final String word;
@@ -146,6 +149,24 @@ public class Word {
 		}
 	}
 
+	public void processAllSorted(final WordProcessor wp) {
+		wp.processWord(this);
+		if (!getChildren().isEmpty()) {
+			wp.preChildren(this);
+			for (final Word child : asSortedList(getChildren())) {
+				child.processAllSorted(wp);
+			}
+			wp.postChildren(this);
+		}
+	}
+
+	public static <T extends Comparable<? super T>> List<T> asSortedList(
+			Collection<T> c) {
+		final List<T> list = new ArrayList<T>(c);
+		Collections.sort(list);
+		return list;
+	}
+
 	public String myToString(boolean withId) {
 		final StringifyWordProcessor wp = new StringifyWordProcessor(withId);
 		processAll(wp);
@@ -168,9 +189,30 @@ public class Word {
 		return id;
 	}
 
+	/**
+	 * Generates a regex matching all words in this tree.
+	 * Note: for the same input the ordering in the regex may change!
+	 * If you need predictable ordering (mainly for testing),
+	 * use see {@link Word#toRegexSorted()} instead.
+	 * 
+	 * @return a non-reproducible regex matching all words in this tree
+	 */
 	public String toRegex() {
 		final RegexWordProcessor wp = new RegexWordProcessor();
 		processAll(wp);
+		return wp.getResult();
+	}
+
+	/**
+	 * Generates a reproducable regex matching all words in this tree.
+	 * If you don't need predictable ordering (mainly for testing),
+	 * use see {@link Word#toRegex()} instead.
+	 * 
+	 * @return a reproducible regex matching all words in this tree
+	 */
+	public String toRegexSorted() {
+		final RegexWordProcessor wp = new RegexWordProcessor();
+		processAllSorted(wp);
 		return wp.getResult();
 	}
 
@@ -184,5 +226,10 @@ public class Word {
 
 	public String getWord() {
 		return word;
+	}
+
+	@Override
+	public int compareTo(final Word o) {
+		return word.compareTo(o.word);
 	}
 }
