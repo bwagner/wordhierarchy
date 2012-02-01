@@ -81,43 +81,88 @@ public class WordHierarchyTest {
 
 	@Test
 	public void testEuer() {
-		final Word euchTree = WordHierarchyBuilder.createWordTree(shortEuch);
-		assertEquals("Eu(?:ch|er(?:e(?:m|s))?|rer?)", euchTree.toRegexSorted());
+		final Word tree = WordHierarchyBuilder.createWordTree(shortEuch);
+		assertEquals("Eu(?:ch|er(?:e(?:m|s))?|rer?)", tree.toRegexSorted());
 	}
 
 	@Test
 	public void testEuerems() {
-		final Word euchTree = WordHierarchyBuilder
-				.createWordTree("Euerem Eueres".split("\\s"));
-		assertEquals("Euere(?:m|s)", euchTree.toRegexSorted());
+		final Word tree = WordHierarchyBuilder.createWordTree("Euerem Eueres"
+				.split("\\s"));
+		assertEquals("Euere(?:m|s)", tree.toRegexSorted());
 	}
 
 	@Test
 	public void testEueres() {
-		final Word euchTree = WordHierarchyBuilder
-				.createWordTree("Euere Eueres".split("\\s"));
-		assertEquals("Eueres?", euchTree.toRegexSorted());
+		final Word tree = WordHierarchyBuilder.createWordTree("Euere Eueres"
+				.split("\\s"));
+		assertEquals("Eueres?", tree.toRegexSorted());
 	}
 
 	@Test
 	public void testEUL() {
-		final Word euchTree = WordHierarchyBuilder.createWordTree("E U L"
+		final Word tree = WordHierarchyBuilder.createWordTree("E U L"
 				.split("\\s"));
-		assertEquals("E|L|U", euchTree.toRegexSorted());
+		assertEquals("E|L|U", tree.toRegexSorted());
 	}
 
 	@Test
 	public void testEULe() {
-		final Word euchTree = WordHierarchyBuilder.createWordTree("E U Le"
+		final Word tree = WordHierarchyBuilder.createWordTree("E U Le"
 				.split("\\s"));
-		assertEquals("E|Le|U", euchTree.toRegexSorted());
+		assertEquals("E|Le|U", tree.toRegexSorted());
 	}
 
 	@Test
 	public void testEULeL() {
-		final Word euchTree = WordHierarchyBuilder.createWordTree("E U Le L"
+		final Word tree = WordHierarchyBuilder.createWordTree("E U Le L"
 				.split("\\s"));
-		assertEquals("E|Le?|U", euchTree.toRegexSorted());
+		assertEquals("E|Le?|U", tree.toRegexSorted());
+	}
+
+	@Test
+	public void testabcabd() {
+		final Word tree = WordHierarchyBuilder.createWordTree("abc abd"
+				.split("\\s"));
+		assertEquals("ab(?:c|d)", tree.toRegexSorted());
+	}
+
+	@Test
+	public void testabcade() {
+		final Word tree = WordHierarchyBuilder.createWordTree("abc ade"
+				.split("\\s"));
+		assertEquals("a(?:bc|de)", tree.toRegexSorted());
+	}
+
+	@Test
+	public void testaabaac() {
+		final Word tree = WordHierarchyBuilder.createWordTree("aab aac"
+				.split("\\s"));
+		assertEquals("aa(?:b|c)", tree.toRegexSorted());
+	}
+
+	@Test
+	public void testaaab() {
+		final Word tree = WordHierarchyBuilder.createWordTree("aa ab"
+				.split("\\s"));
+		assertEquals("a(?:a|b)", tree.toRegexSorted());
+	}
+
+	@Test
+	public void testSameStringTwice() {
+		final Word euchTree = WordHierarchyBuilder
+				.createWordTree("SameStringTwice___SameStringTwice SameStringTwice___AndSome"
+						.split("\\s"));
+		assertEquals("SameStringTwice___(?:AndSome|SameStringTwice)",
+				euchTree.toRegexSorted());
+	}
+
+	@Test
+	public void testMidword() {
+		final Word tree = WordHierarchyBuilder.createWordTree("aberi oberj"
+				.split("\\s"));
+		// assertEquals("(?:a|o)ber(?:i|j)", tree.toRegexSorted());
+		assertEquals("aberi|oberj", tree.toRegexSorted());
 	}
 
 	@Test

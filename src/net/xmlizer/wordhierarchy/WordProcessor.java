@@ -120,7 +120,7 @@ class StringifyWordProcessor implements WordProcessor {
 			sb.append(indent);
 			sb.append(": '");
 		}
-		sb.append(word);
+		sb.append(word.getWord());
 		sb.append(" ");
 		if (withId) {
 			sb.append(word.getId());
@@ -157,7 +157,7 @@ class RegexWordProcessor implements WordProcessor {
 	public boolean processWord(final Word word) {
 		if (word.getWord() == null)
 			return false;
-		sb.append(word);
+		sb.append(word.getWord());
 		sb.append(word.getChildren().isEmpty() ? "|" : "");
 		return false;
 	}

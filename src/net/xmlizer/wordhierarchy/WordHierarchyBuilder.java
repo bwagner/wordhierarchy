@@ -28,64 +28,79 @@ import java.util.Iterator;
 
 public class WordHierarchyBuilder {
 
-	private static void addWordTree(final Word root, final String theWord,
+	private static void addWordTree(final Word root, final String theNewWord,
 			boolean theComplete) {
 		boolean subtreeFound = false;
 		final Iterator<Word> childrenIterator = root.children.iterator();
 		while (!subtreeFound && childrenIterator.hasNext()) {
-			int k = 0;
-			final Word child = childrenIterator.next();
-			while (k < child.getWord().length() && k < theWord.length()
-					&& child.getWord().charAt(k) == theWord.charAt(k)) {
-				++k;
-			}
+			final Word oldChild = childrenIterator.next();
+			int k = findCommonSubstring(oldChild, theNewWord);
 
 			// k == child.word.length || k == theWord.length ||
 			// child[k] != word[k]
 
-			if (k == child.getWord().length()) {
+			if (k == oldChild.getWord().length()) {
 				subtreeFound = true;
-				if (k == theWord.length()) {
-					child.setComplete(true);
+				if (k == theNewWord.length()) {
+					oldChild.setComplete(true);
 				}
 				else {
-					addWordTree(child, theWord.substring(k), theComplete);
+					addWordTree(oldChild, theNewWord.substring(k), theComplete);
 				}
 			}
-			else if (k == theWord.length()) {
+			else if (k == theNewWord.length()) {
 				subtreeFound = true;
-				final Word parent = child.getParent();
-				parent.removeChild(child);
-				final Word newChild = parent.addChild(theWord, theComplete);
-				final Word remainder = newChild.addChild(child.getWord()
-						.substring(k), child.isComplete());
-				remainder.addAll(child.getChildren());
+				final Word parent = oldChild.getParent();
+				parent.removeChild(oldChild);
+				final Word newChild = parent.addChild(theNewWord, theComplete);
+				final Word remainder = newChild.addChild(oldChild.getWord()
+						.substring(k), oldChild.isComplete());
+				remainder.addAll(oldChild.getChildren());
 			}
 			else if (k > 0) {
 				subtreeFound = true;
 				// split the current child c into two by splitting the word at k
 				// obtaining new children child1 and child2
-				final String beginningOfOldWord = child.getWord().substring(0,
-						k);
-				final String endingOfOldWord = child.getWord().substring(k);
-				final String endingOfNewWord = theWord.substring(k);
-				final Word parent = child.getParent();
-				// remove child from its parent.
-				parent.removeChild(child);
-				// add child1 as a child of parent of child
-				final Word child1 = parent.addChild(beginningOfOldWord, false);
-				// add child2 as a child of child1
-				final Word child2 = child1.addChild(endingOfOldWord,
-						child.isComplete());
-				// add all children of child to child2.
-				child2.addAll(child.children);
-				// add new substring to child1
-				child1.addChild(endingOfNewWord, theComplete);
+				final String commonHeadSubstring = oldChild.getWord()
+						.substring(0, k);
+				final String tailOfOldWord = oldChild.getWord().substring(k);
+				final String tailOfNewWord = theNewWord.substring(k);
+				final Word parent = oldChild.getParent();
+				// remove oldChild from its parent.
+				parent.removeChild(oldChild);
+				// add commonHeadChild as a child of parent of oldChild
+				final Word commonHeadChild = parent.addChild(
+						commonHeadSubstring, false);
+				// add tailOfOldChild as a child of commonHeadChild
+				final Word tailOfOldChild = commonHeadChild.addChild(
+						tailOfOldWord, oldChild.isComplete());
+				// add all children of oldChild to tailOfOldChild.
+				tailOfOldChild.addAll(oldChild.children);
+				// add new substring to commonHeadChild
+				commonHeadChild.addChild(tailOfNewWord, theComplete);
 			}
 		}
 		if (!subtreeFound) {
-			root.addChild(new Word(theWord, true));
+			root.addChild(new Word(theNewWord, true));
 		}
+	}
+
+	/**
+	 * Returns index up to which given theWord and theString have common
+	 * substrings starting from the beginning (index 0).
+	 * 
+	 * @param theWord
+	 * @param theString
+	 * @return
+	 */
+	private static int findCommonSubstring(final Word theWord,
+			final String theString) {
+		int k = 0;
+		while (k < theWord.getWord().length() && k < theString.length()
+				&& theWord.getWord().charAt(k) == theString.charAt(k)) {
+			++k;
+		}
+		return k;
 	}
 
 	public static Word createWordTree(final String[] vocabulary,
@@ -124,7 +139,7 @@ public class WordHierarchyBuilder {
 
 	public static Word createWordTree(final Iterator<String> vocabularyIter) {
 		final Word root = new Word();
-		String next = vocabularyIter.next();
+		final String next = vocabularyIter.next();
 		// System.out.println("adding " + next);
 		root.addChild(next, true);
 		while (vocabularyIter.hasNext()) {

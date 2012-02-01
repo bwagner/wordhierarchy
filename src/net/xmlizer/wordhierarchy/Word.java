@@ -67,12 +67,6 @@ public class Word implements Comparable<Word> {
 	 * @return
 	 */
 	Word addChild(final String theWord, final boolean theComplete) {
-		if (theWord.equals(getWord())) {
-			// since there seems to be a word matching this stem
-			// this stem is a complete word!
-			setComplete(true);
-			return this;
-		}
 		final Word newChild = new Word(theWord, theComplete);
 		addChild(newChild);
 		return newChild;
@@ -86,12 +80,6 @@ public class Word implements Comparable<Word> {
 	 * @return
 	 */
 	Word addChild(final String theWord) {
-		if (theWord.equals(getWord())) {
-			// since there seems to be a word matching this stem
-			// this stem is a complete word! (if it wasn't already)
-			setComplete(true);
-			return this;
-		}
 		final Word newChild = new Word(theWord);
 		addChild(newChild);
 		return newChild;
@@ -106,18 +94,9 @@ public class Word implements Comparable<Word> {
 	 * @return
 	 */
 	Word addChild(final Word theWord) {
-		if (theWord.getWord().equals(getWord())) {
-			// since there seems to be a word matching this stem
-			// this stem is a complete word! (if it wasn't already)
-			setComplete(true);
-			addAll(theWord.getChildren());
-			return this;
-		}
-		else {
-			children.add(theWord);
-			theWord.setParent(this);
-			return theWord;
-		}
+		children.add(theWord);
+		theWord.setParent(this);
+		return theWord;
 	}
 
 	void removeChild(final Word theWord) {
@@ -135,7 +114,7 @@ public class Word implements Comparable<Word> {
 
 	@Override
 	public String toString() {
-		return getWord();
+		return myToString();
 	}
 
 	public void processAll(final WordProcessor wp) {
