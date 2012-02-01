@@ -76,14 +76,48 @@ public class WordHierarchyTest {
 			"Euriger", "Euriges", };
 
 	private static final String[] shortIhr = "Ihr Sie".split("\\s");
-	private static final String[] shortEuch = "Euch Euer Eure Eurer"
+	private static final String[] shortEuch = "Euch Euer Eueres Euerem Eure Eurer"
 			.split("\\s");
 
 	@Test
 	public void testEuer() {
 		final Word euchTree = WordHierarchyBuilder.createWordTree(shortEuch);
-		assertEquals("(?:Eu(?:ch|er|re(?:r)?))", euchTree.toRegexSorted());
+		assertEquals("Eu(?:ch|er(?:e(?:m|s))?|rer?)", euchTree.toRegexSorted());
+	}
 
+	@Test
+	public void testEuerems() {
+		final Word euchTree = WordHierarchyBuilder
+				.createWordTree("Euerem Eueres".split("\\s"));
+		assertEquals("Euere(?:m|s)", euchTree.toRegexSorted());
+	}
+
+	@Test
+	public void testEueres() {
+		final Word euchTree = WordHierarchyBuilder
+				.createWordTree("Euere Eueres".split("\\s"));
+		assertEquals("Eueres?", euchTree.toRegexSorted());
+	}
+
+	@Test
+	public void testEUL() {
+		final Word euchTree = WordHierarchyBuilder.createWordTree("E U L"
+				.split("\\s"));
+		assertEquals("E|L|U", euchTree.toRegexSorted());
+	}
+
+	@Test
+	public void testEULe() {
+		final Word euchTree = WordHierarchyBuilder.createWordTree("E U Le"
+				.split("\\s"));
+		assertEquals("E|Le|U", euchTree.toRegexSorted());
+	}
+
+	@Test
+	public void testEULeL() {
+		final Word euchTree = WordHierarchyBuilder.createWordTree("E U Le L"
+				.split("\\s"));
+		assertEquals("E|Le?|U", euchTree.toRegexSorted());
 	}
 
 	@Test
@@ -175,7 +209,7 @@ public class WordHierarchyTest {
 			final Word ihrTree = WordHierarchyBuilder.createWordTree(result,
 					out);
 
-			out.write("result:" + ihrTree.myToString(false));
+			out.write("result:" + ihrTree.myToString());
 			out.write("\n");
 		}
 		out.close();

@@ -1,7 +1,9 @@
 package net.xmlizer.wordhierarchy;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Copyright (C) 2010 Bernhard Wagner
@@ -149,35 +151,54 @@ class StringifyWordProcessor implements WordProcessor {
 
 class RegexWordProcessor implements WordProcessor {
 
-	public RegexWordProcessor() {
-
-	}
-
-	final StringBuilder sb = new StringBuilder();
+	private final StringBuilder sb = new StringBuilder();
 
 	@Override
 	public boolean processWord(final Word word) {
 		if (word.getWord() == null)
 			return false;
 		sb.append(word);
-		if (word.getChildren().isEmpty()) {
-			sb.append("|");
-		}
+		sb.append(word.getChildren().isEmpty() ? "|" : "");
 		return false;
 	}
 
 	@Override
 	public void preChildren(final Word word) {
 		// sb.setLength(sb.length() - 1); // chop off "|"
-		sb.append("(?:");
+
+		sb.append(addParenthesis(word) ? "(?:" : "");
 	}
 
 	@Override
 	public void postChildren(final Word word) {
 		sb.setLength(sb.length() - 1); // chop off "|"
-		sb.append(")");
+		sb.append(addParenthesis(word) ? ")" : "");
 		sb.append(word.isComplete() ? "?" : "");
 		sb.append("|");
+	}
+
+	/**
+	 * Checks whether a parenthesis is required around the children of this
+	 * word.
+	 * Append parenthesis only, if:
+	 * - word has more than one child or
+	 * - word has one child c and ( c has children or c.word.length > 1 )
+	 * 
+	 * But: A precondition for preChildren to be called is that there is at
+	 * least 1 child, so:
+	 * Append parenthesis only, if:
+	 * - word has more than one child or
+	 * - the one child c has children or c.word.length > 1
+	 * 
+	 * @param word
+	 * @return true of children of this word should be put in parenthesis.
+	 */
+	private static boolean addParenthesis(final Word word) {
+		if (word.getWord() == null)
+			return false;
+		final List<Word> children = new ArrayList<Word>(word.getChildren());
+		return (children.size() > 1 || !children.get(0).getChildren().isEmpty() || children
+				.get(0).getWord().length() > 1);
 	}
 
 	public String getResult() {
