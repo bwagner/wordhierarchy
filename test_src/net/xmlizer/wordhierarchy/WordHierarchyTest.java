@@ -77,7 +77,6 @@ public class WordHierarchyTest {
 			"Euretwegen", "Euretwillen", "Eurige", "Eurigem", "Eurigen",
 			"Euriger", "Euriges", };
 
-	private static final String[] shortIhr = "Ihr Sie".split("\\s");
 	private static final String[] shortEuch = "Euch Euer Eueres Euerem Eure Eurer"
 			.split("\\s");
 
