@@ -7,7 +7,9 @@ import static org.junit.Assert.assertTrue;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import net.xmlizer.permutation.PermutationHelper;
@@ -200,22 +202,29 @@ public class WordHierarchyTest {
 
 	@Test
 	public void testCreatorDu() {
-		final String[] vforms = du;
 		assertEquals(42, du.length);
-		final HashSet<String> ihrSet = new HashSet<String>();
-		for (final String str : vforms) {
-			ihrSet.add(str);
-		}
+		final Set<String> ihrSet = new HashSet<String>();
+		ihrSet.addAll(Arrays.asList(du));
 		final Word ihrTree = WordHierarchyBuilder.createWordTree(ihrSet);
 		// System.out.println("result:" + ihrTree.myToString(true));
 		final String regexStr = ihrTree.toRegex();
 		final Pattern pattern = Pattern.compile(regexStr);
 		assertTrue(pattern.matcher("Eurem").find());
-		for (final String str : vforms) {
+		for (final String str : du) {
 			assertTrue(pattern.matcher(str).find());
 		}
 		assertFalse(pattern.matcher("").find());
 		assertFalse(pattern.matcher("fix").find());
+	}
+
+	@Test
+	public void testTestIt() {
+		final Set<String> ihrSet = new HashSet<String>();
+		ihrSet.addAll(Arrays.asList(du));
+		final Word ihrTree = WordHierarchyBuilder.createWordTree(ihrSet);
+		assertTrue(ihrTree.testIt(ihrSet));
+		ihrSet.add("garbage");
+		assertFalse(ihrTree.testIt(ihrSet));
 	}
 
 	// This test runs for a while

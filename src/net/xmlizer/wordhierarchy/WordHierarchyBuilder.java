@@ -31,7 +31,7 @@ public class WordHierarchyBuilder {
 	private static void addWordTree(final Word root, final String theNewWord,
 			boolean theComplete) {
 		boolean subtreeFound = false;
-		final Iterator<Word> childrenIterator = root.children.iterator();
+		final Iterator<Word> childrenIterator = root.getChildren().iterator();
 		while (!subtreeFound && childrenIterator.hasNext()) {
 			final Word oldChild = childrenIterator.next();
 			int k = findCommonSubstring(oldChild, theNewWord);
@@ -75,7 +75,7 @@ public class WordHierarchyBuilder {
 				final Word tailOfOldChild = commonHeadChild.addChild(
 						tailOfOldWord, oldChild.isComplete());
 				// add all children of oldChild to tailOfOldChild.
-				tailOfOldChild.addAll(oldChild.children);
+				tailOfOldChild.addAll(oldChild.getChildren());
 				// add new substring to commonHeadChild
 				commonHeadChild.addChild(tailOfNewWord, theComplete);
 			}
@@ -124,8 +124,9 @@ public class WordHierarchyBuilder {
 		final Word result = createWordTree(vocabulary.iterator());
 		if (out != null) {
 			try {
-				out.write("result ok?:" + result.testIt(vocabulary, result));
+				out.write("result ok?:" + result.testIt(vocabulary));
 				out.write("\n");
+				out.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

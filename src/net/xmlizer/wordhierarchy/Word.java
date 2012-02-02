@@ -31,7 +31,7 @@ public class Word implements Comparable<Word> {
 	private static int instanceCount;
 	private final int id;
 	private final String word;
-	final Set<Word> children = new HashSet<Word>();
+	private final Set<Word> children = new HashSet<Word>();
 	private boolean complete;
 	private Word parent;
 
@@ -60,11 +60,13 @@ public class Word implements Comparable<Word> {
 	}
 
 	/**
-	 * Adds new child to this node and returns the new child.
-	 * If theWord equals this.word ignores theWord and returns this.
+	 * Creates a new child and adds it to this word and returns the new child.
 	 * 
 	 * @param theWord
-	 * @return
+	 *            the word to initialize the new child from
+	 * @param theComplete
+	 *            whether the new child is a complete word
+	 * @return the new child
 	 */
 	Word addChild(final String theWord, final boolean theComplete) {
 		final Word newChild = new Word(theWord, theComplete);
@@ -74,10 +76,10 @@ public class Word implements Comparable<Word> {
 
 	/**
 	 * Adds new child to this node and returns the new child.
-	 * If theWord equals this.word ignores theWord and returns this.
 	 * 
 	 * @param theWord
-	 * @return
+	 *            the word to initialize the new child from
+	 * @return the new child
 	 */
 	Word addChild(final String theWord) {
 		final Word newChild = new Word(theWord);
@@ -87,11 +89,10 @@ public class Word implements Comparable<Word> {
 
 	/**
 	 * Adds child to this node and returns it.
-	 * If theWord.word equals this.word drops theWord, adds its
-	 * children to this and returns this.
 	 * 
 	 * @param theWord
-	 * @return
+	 *            the word to initialize the new child from
+	 * @return the new child
 	 */
 	Word addChild(final Word theWord) {
 		children.add(theWord);
@@ -117,6 +118,16 @@ public class Word implements Comparable<Word> {
 		return myToString();
 	}
 
+	/**
+	 * Processes this word and its children.
+	 * 
+	 * Note: The order of processing may vary from call to call!
+	 * If you need reproducible order, use
+	 * {@link Word#processAllSorted(WordProcessor)}
+	 * 
+	 * @param wp
+	 *            the WordProcessor to process this word and its children.
+	 */
 	public void processAll(final WordProcessor wp) {
 		wp.processWord(this);
 		if (!getChildren().isEmpty()) {
@@ -128,6 +139,16 @@ public class Word implements Comparable<Word> {
 		}
 	}
 
+	/**
+	 * Processes this word and its children.
+	 * 
+	 * Note: The order of processing is reproducible from call to call.
+	 * If you don't need reproducible order, use
+	 * {@link Word#processAll(WordProcessor)}
+	 * 
+	 * @param wp
+	 *            the WordProcessor to process this word and its children.
+	 */
 	public void processAllSorted(final WordProcessor wp) {
 		wp.processWord(this);
 		if (!getChildren().isEmpty()) {
@@ -144,8 +165,10 @@ public class Word implements Comparable<Word> {
 	 * see {@linkplain http://stackoverflow.com/a/740351/642750}
 	 * 
 	 * @param <T>
+	 *            parameterization of collection to sort
 	 * @param c
-	 * @return set as a sorted list.
+	 *            collection to sort
+	 * @return set as a sorted list
 	 */
 	public static <T extends Comparable<? super T>> List<T> asSortedList(
 			Collection<T> c) {
@@ -154,28 +177,72 @@ public class Word implements Comparable<Word> {
 		return list;
 	}
 
+	/**
+	 * Stringifies this word. Optionally, each word gets its own id.
+	 * 
+	 * Note: The order of the children may vary from call to call!
+	 * If you need reproducible order, use
+	 * {@link Word#myToStringSorted(boolean)}
+	 * 
+	 * @param withId
+	 *            Each word gets its own id displayed
+	 * @return this word stringified.
+	 */
 	public String myToString(boolean withId) {
 		final StringifyWordProcessor wp = new StringifyWordProcessor(withId);
 		processAll(wp);
 		return wp.getResult();
 	}
 
+	/**
+	 * Stringifies this word. Optionally, each word gets its own id.
+	 * 
+	 * Note: The order of the children is reproducible from call to call.
+	 * If you don't need reproducible order, use
+	 * {@link Word#myToString(boolean)}
+	 * 
+	 * @param withId
+	 *            Each word gets its own id displayed
+	 * @return this word stringified.
+	 */
 	public String myToStringSorted(boolean withId) {
 		final StringifyWordProcessor wp = new StringifyWordProcessor(withId);
 		processAllSorted(wp);
 		return wp.getResult();
 	}
 
+	/**
+	 * Stringifies this word.
+	 * 
+	 * Note: The order of the children may vary from call to call!
+	 * If you need reproducible order, use {@link Word#myToStringSorted()}
+	 * 
+	 * @return this word stringified.
+	 */
 	public String myToString() {
 		return myToString(false);
 	}
 
+	/**
+	 * Stringifies this word.
+	 * 
+	 * Note: The order of the children is reproducible from call to call.
+	 * If you don't need reproducible order, use {@link Word#myToString()}
+	 * 
+	 * @return this word stringified.
+	 */
 	public String myToStringSorted() {
 		return myToStringSorted(false);
 	}
 
-	public boolean testIt(final Collection<String> vocabulary, final Word result) {
-		TestWordProcessor twp = new TestWordProcessor(vocabulary);
+	/**
+	 * Runs a TestWordProcessor on this word.
+	 * 
+	 * @param vocabulary
+	 * @return
+	 */
+	public boolean testIt(final Collection<String> vocabulary) {
+		final TestWordProcessor twp = new TestWordProcessor(vocabulary);
 		processAll(twp);
 		return twp.resultOk();
 	}
@@ -186,6 +253,11 @@ public class Word implements Comparable<Word> {
 		}
 	}
 
+	/**
+	 * Returns id unique to this word.
+	 * 
+	 * @return id unique to this word
+	 */
 	public int getId() {
 		return id;
 	}
@@ -193,7 +265,7 @@ public class Word implements Comparable<Word> {
 	/**
 	 * Generates a regex matching all words in this tree.
 	 * Note: for the same input the ordering in the regex may change!
-	 * If you need predictable ordering (mainly for testing),
+	 * If you need reproducible ordering (mainly for testing),
 	 * use see {@link Word#toRegexSorted()} instead.
 	 * 
 	 * @return a non-reproducible regex matching all words in this tree
@@ -205,8 +277,8 @@ public class Word implements Comparable<Word> {
 	}
 
 	/**
-	 * Generates a reproducable regex matching all words in this tree.
-	 * If you don't need predictable ordering (mainly for testing),
+	 * Generates a reproducible regex matching all words in this tree.
+	 * If you don't need reproducible ordering (mainly for testing),
 	 * use see {@link Word#toRegex()} instead.
 	 * 
 	 * @return a reproducible regex matching all words in this tree
@@ -217,8 +289,8 @@ public class Word implements Comparable<Word> {
 		return wp.getResult();
 	}
 
-	public void setComplete(boolean complete) {
-		this.complete = complete;
+	public void setComplete(boolean theComplete) {
+		complete = theComplete;
 	}
 
 	public boolean isComplete() {
