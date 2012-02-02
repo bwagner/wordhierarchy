@@ -29,6 +29,7 @@ It's mainly to be used is as a library.
 
 Todo
 -------
+
 - works best for words with common substrings from the left.
   Could be improved to work with substrings *anywhere*.
 
@@ -37,6 +38,14 @@ Todo
 - simplify using ideas from this [post](http://stackoverflow.com/a/7433899/642750)
 
 - improve when there's a row of single characters: Instead of e.g. `(?:3|8|1|6|4)` it could generate `[38164]`.
+
+- improve command line: offer options to generate different regexp dialects.
+
+External Dependendencies
+-------
+
+- https://github.com/bwagner/interval-tree as forked from https://github.com/dyoo/interval-tree
+- https://github.com/bwagner/permutation (for tests only)
 
 Authors
 -------
@@ -47,7 +56,7 @@ Authors
 + http://xlmizer.net
 
 License
----------------------
+-------
 
 Copyright 2011 Bernhard Wagner.
 
