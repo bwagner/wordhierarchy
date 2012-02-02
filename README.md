@@ -27,6 +27,17 @@ the included `RegexWordProcessor`, which can easily be adapted to other regexp d
 This example shows the command line use which is merely intended for demonstration purposes.
 It's mainly to be used is as a library.
 
+Todo
+-------
+- works best for words with common substrings from the left.
+  Could be improved to work with substrings *anywhere*.
+
+- look at [Trie](http://en.wikipedia.org/wiki/Trie)
+
+- simplify using ideas from this [post](http://stackoverflow.com/a/7433899/642750)
+
+- improve when there's a row of single characters: Instead of e.g. `(?:3|8|1|6|4)` it could generate `[38164]`.
+
 Authors
 -------
 
