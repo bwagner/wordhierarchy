@@ -33,7 +33,17 @@ interface WordProcessor {
 	void postChildren(final Word word);
 }
 
-class TestWordProcessor implements WordProcessor {
+abstract class AbstractWordProcessor implements WordProcessor {
+
+	@Override
+	public void preChildren(final Word word) {}
+
+	@Override
+	public void postChildren(final Word word) {}
+
+}
+
+class TestWordProcessor extends AbstractWordProcessor {
 	private final Collection<String> bkup;
 	private final Collection<String> ref = new HashSet<String>();
 
@@ -61,16 +71,6 @@ class TestWordProcessor implements WordProcessor {
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public void preChildren(final Word word) {
-		// nothing to do
-	}
-
-	@Override
-	public void postChildren(final Word word) {
-		// nothing to do
 	}
 
 	public boolean resultOk() {
