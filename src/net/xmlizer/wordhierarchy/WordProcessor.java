@@ -187,7 +187,7 @@ class RegexWordProcessor implements WordProcessor {
 	 * - the one child c has children or c.word.length > 1
 	 * 
 	 * @param word
-	 * @return true of children of this word should be put in parenthesis.
+	 * @return true if children of this word should be put in parenthesis.
 	 */
 	private static boolean addParenthesis(final Word word) {
 		if (word.getWord() == null)
