@@ -159,7 +159,9 @@ public class WordHierarchyBuilder {
 		}
 		final Word word = createWordTree(args);
 		System.out.println(word.myToString(false));
-		System.out.println(word.toRegex());
+		final RegexWordProcessor wp = new RegexWordProcessor();
+		word.processAll(wp);
+		System.out.println(wp.getResult());
 		System.out.println();
 	}
 }
