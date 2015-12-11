@@ -103,11 +103,7 @@ class StringifyWordProcessor implements WordProcessor {
 	private static int indent;
 
 	private static String makeIndent() {
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < indent; ++i) {
-			sb.append(" ");
-		}
-		return sb.toString();
+		return new String(new char[indent]).replace("\0", " ");
 	}
 
 	@Override

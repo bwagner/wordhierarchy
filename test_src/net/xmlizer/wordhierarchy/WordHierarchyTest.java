@@ -267,4 +267,22 @@ public class WordHierarchyTest {
 		}
 		out.close();
 	}
+	
+	@Test
+	public void testToStr() {
+		final String input[]= "3112 3122 3132 31425 31".split(" ");
+		final Word tree = WordHierarchyBuilder.createWordTree(input);
+		String expected = " 31 \n  12 \n  22 \n  32 \n  425 \n";
+		String got = tree.myToStringSorted();
+		assertEquals(expected, got);
+	}
+	
+	@Test
+	public void testToStr2() {
+		final String input[]= "3112 3122 3132 31425".split(" ");
+		final Word tree = WordHierarchyBuilder.createWordTree(input);
+		String expected = " 31 -\n  12 \n  22 \n  32 \n  425 \n";
+		String got = tree.myToStringSorted();
+		assertEquals(expected, got);
+	}
 }
