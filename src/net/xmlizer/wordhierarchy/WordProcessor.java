@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Copyright (C) 2010 Bernhard Wagner
@@ -28,8 +29,16 @@ import java.util.List;
 interface WordProcessor {
 	boolean processWord(final Word word);
 
+	/**
+	 * Hook called before processing children of this word
+	 * @param word
+	 */
 	void preChildren(final Word word);
 
+	/**
+	 * Hook called after processing children of this word
+	 * @param word
+	 */
 	void postChildren(final Word word);
 }
 
@@ -148,13 +157,15 @@ class StringifyWordProcessor implements WordProcessor {
 class RegexWordProcessor implements WordProcessor {
 
 	private final StringBuilder sb = new StringBuilder();
+	
+	private final Stack<String> parentheses = new Stack<String>();
 
 	@Override
 	public boolean processWord(final Word word) {
 		if (word.getWord() == null)
 			return false;
 		sb.append(word.getWord());
-		sb.append(word.getChildren().isEmpty() ? "|" : "");
+		sb.append(word.getChildren().isEmpty() && parentheses.peek() != "]" ? "|" : "");
 		return false;
 	}
 
@@ -162,13 +173,15 @@ class RegexWordProcessor implements WordProcessor {
 	public void preChildren(final Word word) {
 		// sb.setLength(sb.length() - 1); // chop off "|"
 
-		sb.append(addParenthesis(word) ? "(?:" : "");
+		sb.append(getOpeningParenthesis(word));
 	}
 
 	@Override
 	public void postChildren(final Word word) {
-		sb.setLength(sb.length() - 1); // chop off "|"
-		sb.append(addParenthesis(word) ? ")" : "");
+		if(parentheses.peek() != "]") {
+			sb.setLength(sb.length() - 1); // chop off "|"
+		}
+		sb.append(getClosingParenthesis());
 		sb.append(word.isComplete() ? "?" : "");
 		sb.append("|");
 	}
@@ -189,12 +202,34 @@ class RegexWordProcessor implements WordProcessor {
 	 * @param word
 	 * @return true if children of this word should be put in parenthesis.
 	 */
-	private static boolean addParenthesis(final Word word) {
-		if (word.getWord() == null)
-			return false;
+	private String getOpeningParenthesis(final Word word) {
+		if (word.getWord() == null) {
+			parentheses.push("");
+			return "";
+		}
 		final List<Word> children = new ArrayList<Word>(word.getChildren());
-		return (children.size() > 1 || !children.get(0).getChildren().isEmpty() || children
-				.get(0).getWord().length() > 1);
+		if(children.size() > 1){
+			if(children.stream().allMatch(child -> child.getWord().length() == 1)){
+				parentheses.push("]");
+				return "[";			
+			} else {
+				parentheses.push(")");
+				return "(?:";			
+			}
+		} else if(!children.get(0).getChildren().isEmpty()) {
+			parentheses.push(")");
+			return "(?:";			
+		} else if(children.get(0).getWord().length() > 1) {
+			parentheses.push(")");
+			return "(?:";			
+		} else {
+			parentheses.push("");
+			return "";			
+		}
+	}
+	
+	private String getClosingParenthesis() {
+		return parentheses.pop();
 	}
 
 	public String getResult() {
