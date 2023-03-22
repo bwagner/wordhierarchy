@@ -17,6 +17,34 @@
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
+  <scm>
+    <connection>scm:git:git://github.com/sbsdev/wordhierarchy.git</connection>
+    <developerConnection>scm:git:git@github.com:sbsdev/wordhierarchy.git</developerConnection>
+    <url>https://github.com/sbsdev/wordhierarchy/tree/master</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <licenses>
+    <license>
+      <name>GNU General Public License, Version 3</name>
+      <url>http://www.gnu.org/copyleft/gpl.html</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Christian Egli</name>
+      <email>christian.egli@sbs.ch</email>
+      <organization>Swiss Library for the Blind, Visually Impaired and Print Disabled</organization>
+      <organizationUrl>http://www.sbs.ch/</organizationUrl>
+    </developer>
+    <developer>
+      <name>Bernhard Wagner</name>
+      <email>web@bernhardwagner.net</email>
+      <organizationUrl>http://github.com/bwagner</organizationUrl>
+    </developer>
+  </developers>
+
   <dependencies>
     <dependency>
       <groupId>ch.sbs.preptools</groupId>
@@ -31,4 +59,58 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.0-M7</version>
+	<configuration>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+	</configuration>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-source-plugin</artifactId>
+	<version>2.2.1</version>
+	<executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+	</executions>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-javadoc-plugin</artifactId>
+	<version>2.9.1</version>
+	<executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+	</executions>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-gpg-plugin</artifactId>
+	<version>1.5</version>
+	<executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+	</executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
