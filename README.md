@@ -1,5 +1,5 @@
-wordhierarchy
-=============
+# wordhierarchy
+
 
 This project provides a word hierarchy builder.
 It builds a tree out of a set of words which can then be navigated by a `WordProcessor` to generate e.g.
@@ -27,8 +27,7 @@ the included `RegexWordProcessor`, which can easily be adapted to other regexp d
 This example shows the command line use which is merely intended for demonstration purposes.
 It's mainly to be used is as a library.
 
-Todo
--------
+# Todo
 
 - works best for words with common substrings from the left.
   Could be improved to work with substrings *anywhere*.
@@ -41,22 +40,32 @@ Todo
 
 - improve command line: offer options to generate different regexp dialects.
 
-External Dependendencies
--------
+# Build
 
-- https://github.com/bwagner/interval-tree as forked from https://github.com/dyoo/interval-tree
-- https://github.com/bwagner/permutation (for tests only)
+```
+mvn -B package
+```
 
-Authors
--------
+# Release
+
+```
+mvn release:prepare
+```
+
+Perform a release without deploying. The deploy step is done in a gh action.
+
+```
+mvn release:perform -Darguments="-Dmaven.deploy.skip=true"
+```
+
+# Authors
 
 **Bernhard Wagner**
 
 + http://github.com/bwagner
 + http://xlmizer.net
 
-License
--------
+# License
 
 Copyright 2011 Bernhard Wagner.
 
