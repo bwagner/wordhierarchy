@@ -7,14 +7,14 @@ Regexps that match any of the words in the given set.
 
 Example:
 ```console
-    java -jar dist/wordhierarchy.jar Euch Euer Eure Eurer
-     Eu -
-      er
-      ch
-      re
-       r
+java -jar dist/wordhierarchy.jar Euch Euer Eure Eurer
+ Eu -
+  er
+  ch
+  re
+   r
 
-    Eu(?:er|ch|rer?)
+Eu(?:er|ch|rer?)
 
 ```
 
