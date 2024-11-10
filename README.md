@@ -27,7 +27,7 @@ the included `RegexWordProcessor`, which can easily be adapted to other regexp d
 [Perl](http://perldoc.perl.org/perlfaq6.html), etc.).
 
 This example shows the command line interface which is merely intended for demonstration purposes,
-as its mainly to be used is as a library.
+as it is mainly to be used is as a library.
 
 Build
 -------
