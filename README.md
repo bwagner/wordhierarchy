@@ -9,12 +9,12 @@ Example:
 
     java -jar dist/wordhierarchy.jar Euch Euer Eure Eurer
      Eu -
-      er 
-      ch 
-      re 
-       r 
+      er
+      ch
+      re
+       r
 
-    (?:Eu(?:er|ch|re(?:r)?))
+    Eu(?:er|ch|rer?)
 
 The output of the command line program is the input partitioned into common parts of words.
 If a part of a word does not complete a word, a ` - ` is appended (above: `Eu -`). If a part
@@ -22,10 +22,16 @@ of a word does indeed complete a word, no ` - ` is appended (above: `er`, `ch`, 
 
 The last line of the output is a Java regexp that matches the set of words. It is built by
 the included `RegexWordProcessor`, which can easily be adapted to other regexp dialects
-(e.g. [perl](http://perldoc.perl.org/perlfaq6.html), etc.).
+(e.g. [Python](https://docs.python.org/3/library/re.html),
+[JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions),
+[Perl](http://perldoc.perl.org/perlfaq6.html), etc.).
 
-This example shows the command line use which is merely intended for demonstration purposes.
-It's mainly to be used is as a library.
+This example shows the command line interface which is merely intended for demonstration purposes,
+as its mainly to be used is as a library.
+
+Build
+-------
+ant jar
 
 Todo
 -------
@@ -36,8 +42,6 @@ Todo
 - look at [Trie](http://en.wikipedia.org/wiki/Trie)
 
 - simplify using ideas from this [post](http://stackoverflow.com/a/7433899/642750)
-
-- improve when there's a row of single characters: Instead of e.g. `(?:3|8|1|6|4)` it could generate `[38164]`.
 
 - improve command line: offer options to generate different regexp dialects.
 
