@@ -6,7 +6,7 @@ It builds a tree out of a set of words which can then be navigated by a `WordPro
 Regexps that match any of the words in the given set.
 
 Example:
-
+```console
     java -jar dist/wordhierarchy.jar Euch Euer Eure Eurer
      Eu -
       er
@@ -15,6 +15,8 @@ Example:
        r
 
     Eu(?:er|ch|rer?)
+
+```
 
 The output of the command line program is the input partitioned into common parts of words.
 If a part of a word does not complete a word, a ` - ` is appended (above: `Eu -`). If a part
@@ -31,7 +33,9 @@ as it is mainly to be used is as a library.
 
 Build
 -------
+```console
 ant jar
+```
 
 Todo
 -------
